@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: shopify-descriptions-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node server/index.js
+    envVars:
+      - key: SUPABASE_URL
+        value: https://njisolswvshpvdaqdxlj.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qaXNvbHN3dnNocHZkYXFkeGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY2MzI3NjgsImV4cCI6MjA1MjIwODc2OH0.meqLrnDlvLGnDdxVGD78rAI6O6Z9w-aE5ix0LB_hFOw
+      - key: NODE_VERSION
+        value: 18.0.0
+      - key: PORT
+        value: 3000
