@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: shopify-descriptions-api
+    env: node
+    region: oregon
+    buildCommand: |
+      npm ci
+      npm run build
+      npm run postbuild
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.0.0
+      - key: PORT
+        value: 3000
