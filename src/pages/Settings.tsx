@@ -10,10 +10,10 @@ export function Settings() {
   }>({ connected: false, message: '' });
 
   const [credentials, setCredentials] = useState({
-    apiKey: '69aa28041fb3b759cf75874faa4fe878',
-    apiSecret: 'af540bfe39338f2e005a333dbe190897',
-    shopDomain: 'hbs79y-kd.myshopify.com',
-    accessToken: 'shpat_XXXXXXXXXX'
+    apiKey: '',
+    apiSecret: '',
+    shopDomain: '',
+    accessToken: ''
   });
 
   const [isRetrying, setIsRetrying] = useState(false);
@@ -53,7 +53,7 @@ export function Settings() {
       const formattedDomain = trimmedCredentials.shopDomain.includes('.myshopify.com')
         ? trimmedCredentials.shopDomain
         : `${trimmedCredentials.shopDomain}.myshopify.com`;
-
+        
       const response = await fetch('/api/test-shopify-connection', {
         method: 'POST',
         headers: {
@@ -194,7 +194,7 @@ export function Settings() {
               <input
                 type="text"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Exemplo: 69aa28041fb3b759cf75874faa4fe878"
+                placeholder="Insira sua chave da API"
                 value={credentials.apiKey}
                 onChange={(e) => setCredentials({
                   ...credentials,
@@ -209,7 +209,7 @@ export function Settings() {
               <input
                 type="text"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Exemplo: af540bfe39338f2e005a333dbe190897"
+                placeholder="Insira sua chave secreta da API"
                 value={credentials.apiSecret}
                 onChange={(e) => setCredentials({
                   ...credentials,
@@ -239,7 +239,7 @@ export function Settings() {
               <input
                 type="text"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Exemplo: shpat_XXXXXXXXXX"
+                placeholder="Insira seu token de acesso (shpat_xxxxxxxxxxxxxx)"
                 value={credentials.accessToken}
                 onChange={(e) => setCredentials({
                   ...credentials,

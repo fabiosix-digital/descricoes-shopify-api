@@ -2,15 +2,27 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// Configurar __dirname para ES modules
+const __filename = fileURLToPath(import.meta.url);
 
 // Load environment variables
-config();
+
+// Load environment variables from .env file
+config({ path: join(__dirname, '../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configurar CORS para aceitar requisições do Netlify e localhost
 app.use(cors({
-  origin: '*',
+  origin: [
+    process.env.FRONTEND_URL,
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Accept', 'Authorization']
@@ -62,7 +74,7 @@ app.post('/api/test-shopify-connection', async (req, res) => {
       throw new Error('Resposta da Shopify não contém dados da loja');
     }
   } catch (error) {
-    console.error('Erro durante o teste de conexão:', error);
+    console.error('Erro na conexão:', error.message);
     let errorMessage = 'Erro de conexão desconhecido';
 
     if (error.message?.includes('401')) {
@@ -95,5 +107,6 @@ app.post('/api/generate-description', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log('Servidor iniciado');
+  console.log('Ambiente:', process.env.NODE_ENV || 'development');
 });
