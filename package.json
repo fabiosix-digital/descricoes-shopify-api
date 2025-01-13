@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run dev:server\"",
-    "dev:server": "cross-env NODE_ENV=development HOST=0.0.0.0 node server/index.js",
-    "start": "cross-env NODE_ENV=production HOST=0.0.0.0 node server/index.js",
+    "dev:server": "node server/index.js",
+    "start": "cross-env NODE_ENV=production node server/index.js",
     "build": "vite build",
-    "postbuild": "cp -r dist server/",
+    "postbuild": "mkdir -p server/dist && cp -r dist/* server/dist/",
     "lint": "eslint .",
     "preview": "vite preview"
   },

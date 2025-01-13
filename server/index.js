@@ -6,8 +6,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import path from 'path';
+import { dirname, join, resolve } from 'path';
 
 // Configurar __dirname para ES modules
 const __filename = fileURLToPath(import.meta.url); 
@@ -16,13 +15,23 @@ const __dirname = dirname(__filename);
 // Carregar variáveis de ambiente
 config();
 
+// Configurações do servidor
 const app = express();
 const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0';
+const HOST = process.env.HOST || '0.0.0.0';
 const isProduction = process.env.NODE_ENV === 'production';
 
+console.log(`[${new Date().toISOString()}] Iniciando servidor...`);
+console.log(`[${new Date().toISOString()}] NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`[${new Date().toISOString()}] HOST: ${HOST}`);
+console.log(`[${new Date().toISOString()}] PORT: ${PORT}`);
+
+// Configurar caminho do dist
+const distPath = resolve(__dirname, isProduction ? './dist' : '../dist');
+console.log(`[${new Date().toISOString()}] Verificando pasta dist: ${distPath}`);
+
 // Servir arquivos estáticos do frontend com path absoluto
-app.use(express.static(path.join(__dirname, isProduction ? './dist' : '../dist')));
+app.use(express.static(distPath));
 
 // Configurar CORS para aceitar requisições do Netlify e localhost
 app.use(cors({
@@ -117,7 +126,7 @@ app.post('/api/generate-description', async (req, res) => {
 
 // Rota para servir o frontend - deve ser a última rota
 app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, isProduction ? './dist/index.html' : '../dist/index.html');
+  const indexPath = join(distPath, 'index.html');
   console.log('Servindo arquivo:', indexPath);
   res.sendFile(indexPath);
 });
@@ -126,5 +135,5 @@ app.listen(PORT, HOST, () => {
   console.log(`[${new Date().toISOString()}] Servidor iniciado em ${HOST}:${PORT}`);
   console.log(`[${new Date().toISOString()}] Ambiente: ${process.env.NODE_ENV}`);
   console.log(`[${new Date().toISOString()}] Diretório base: ${__dirname}`);
-  console.log(`[${new Date().toISOString()}] Caminho do index.html: ${path.join(__dirname, isProduction ? './dist/index.html' : '../dist/index.html')}`);
+  console.log(`[${new Date().toISOString()}] Caminho do index.html: ${join(distPath, 'index.html')}`);
 });
